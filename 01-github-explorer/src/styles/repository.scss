@@ -1,0 +1,43 @@
+section.repository-list {
+  margin: 4rem;
+
+  h1 {
+    margin-bottom: 1.6rem;
+  }
+
+  ul {
+    li {
+      padding: 1.6rem 1.2rem;
+      background: #1b1b1d;
+      border-radius: 0.8rem;
+      transition-property: all;
+      transition-duration: 200ms;
+
+      &:hover {
+        background: #121214;
+      }
+
+      & + li {
+        margin-top: 2rem;
+      }
+
+      strong {
+        display: inline-block;
+        margin-bottom: 0.4rem;
+        text-transform: capitalize;
+      }
+
+      p {
+        font-size: 1.4rem;
+      }
+
+      a {
+        display: inline-block;
+        margin-top: 1.6rem;
+        text-decoration: none;
+
+        color: #8257e6;
+      }
+    }
+  }
+}
