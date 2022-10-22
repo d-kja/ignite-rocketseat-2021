@@ -1,24 +1,22 @@
 <h1 align="center"> Ignite projects </h1>
 
-<p align="center">
-Started at the end of 2022
-</p>
-
-<p align="center">
-  <a href="#-tecnologias">Stack</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-projeto">Projects</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-layout">Layout</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#memo-licença">License</a>
-</p>
-
-<p align="center">
-  <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=49AA26&labelColor=000000" />
-</p>
-
 <br>
 
 <p align="center">
   <img alt="rocketpay" src="https://xesque.rocketseat.dev/platform/1654117672768.svg" />
+</p>
+
+<p align="center">
+  Started at the end of 2022
+</p>
+
+<p align="center">
+  <a href="#-stack">Stack</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#memo-license">License</a>
+</p>
+
+<p align="center">
+  <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=49AA26&labelColor=000000" />
 </p>
 
 ## 🚀 Stack
