@@ -5,8 +5,14 @@ import "../../styles/repository.scss"
 
 const repoUrl = "https://api.github.com/users/Nyyu/repos"
 
+export type RepositoryType = {
+  name: string
+  description: string
+  html_url: string
+}
+
 export function RepositoryList() {
-  const [repos, setRepos] = useState([])
+  const [repos, setRepos] = useState<RepositoryType[]>([])
 
   useEffect(() => {
     fetch(repoUrl)

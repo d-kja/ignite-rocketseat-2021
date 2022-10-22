@@ -1,7 +1,15 @@
+import { RepositoryType } from "./RepositoryList"
+
 const lorem =
   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo nisi corporis blanditiis corrupti minima unde?"
 
-export function RepositoryItem({ repository }) {
+interface RepositoryItemProps {
+  repository: RepositoryType
+}
+
+export function RepositoryItem({
+  repository,
+}: RepositoryItemProps) {
   return (
     <li>
       <strong>{repository?.name ?? "Repo"}</strong>
