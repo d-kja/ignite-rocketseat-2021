@@ -47,5 +47,3 @@
 Under MIT license.
 
 <br>
-
-~~Obs: I've taken this course once, but I'm re-doing it for the sake of consistency. For that reason, I sort of remember what will be used during the course.~~
