@@ -33,6 +33,7 @@
 
 ###### Styling
 - [Sass](https://sass-lang.com)
+- Styled Components
 - [Tailwind](https://tailwindcss.com)
 - [ChakraUI](https://chakra-ui.com)
 
