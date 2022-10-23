@@ -6,10 +6,11 @@ export const GlobalStyle = createGlobalStyle`
     --title-color: #363f5f;
     --text-color: #969cb3;
 
-    --warning-color: #e62e40;
-    --success-color: #33cc95;
-    --accent-color-dark: #5429cc;
-    --accent-color-light: #6933FF;
+    --red: #e62e40;
+    --green: #33cc95;
+    --accent-dark: #5429cc;
+    --accent-darker: #5d27b4;
+    --accent-light: #6933FF;
     
     --other: #e5e5e5;
     --base-color: #ffffff;
