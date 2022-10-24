@@ -10,6 +10,9 @@ import { api } from "../services/api"
 
 interface TransactionsContextProps {
   transactions: TableItemProps[]
+  handleUpdateTransactionsArray: (
+    data: TableItemProps
+  ) => void
 }
 
 export const TransactionsContext = createContext(
@@ -30,14 +33,26 @@ export const TransactionsProvider = ({
   useEffect(() => {
     const fetchTransactions = async () => {
       const response = await api.get("/transactions")
-      if (response.data) setTransactions(response.data)
+      if (response.data)
+        setTransactions(response.data?.transactions)
     }
 
     fetchTransactions()
   }, [])
 
+  const handleUpdateTransactionsArray = (
+    data: TableItemProps
+  ) => {
+    setTransactions((prev) => [...prev, data])
+  }
+
   return (
-    <TransactionsContext.Provider value={{ transactions }}>
+    <TransactionsContext.Provider
+      value={{
+        transactions,
+        handleUpdateTransactionsArray,
+      }}
+    >
       {children}
     </TransactionsContext.Provider>
   )

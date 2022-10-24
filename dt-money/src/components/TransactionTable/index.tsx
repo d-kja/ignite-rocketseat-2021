@@ -4,8 +4,6 @@ import { TransactionsContext } from "../../context/TransactionsContext"
 import { Container } from "./styles"
 import { TableItem } from "./TableItem"
 
-interface TransactionTableProps {}
-
 export const TransactionTable = () => {
   const { transactions = [] } = useContext(
     TransactionsContext
