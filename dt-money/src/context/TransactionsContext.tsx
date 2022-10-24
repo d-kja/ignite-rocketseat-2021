@@ -8,10 +8,18 @@ import {
 import { TableItemProps } from "../components/TransactionTable/TableItem"
 import { api } from "../services/api"
 
+/** Omit<> or Pick<> */
+export type Transaction = Omit<
+  TableItemProps,
+  "id" | "createdAt"
+>
+export type TransactionPost = {
+  createdAt: Date
+} & Transaction
 interface TransactionsContextProps {
   transactions: TableItemProps[]
   handleUpdateTransactionsArray: (
-    data: TableItemProps
+    data: TransactionPost
   ) => void
 }
 
@@ -40,10 +48,14 @@ export const TransactionsProvider = ({
     fetchTransactions()
   }, [])
 
-  const handleUpdateTransactionsArray = (
-    data: TableItemProps
+  const handleUpdateTransactionsArray = async (
+    data: TransactionPost
   ) => {
-    setTransactions((prev) => [...prev, data])
+    const res = await api.post("/transactions", data)
+
+    const newTransactions = res.data["transaction"]
+    if (newTransactions)
+      setTransactions((prev) => [...prev, newTransactions])
   }
 
   return (

@@ -1,12 +1,10 @@
-import { useContext, useEffect, useState } from "react"
-import { TransactionsContext } from "../../context/TransactionsContext"
-
 import { Container } from "./styles"
 
 import IncomeSVG from "../../assets/income.svg"
 import OutcomeSVG from "../../assets/outcome.svg"
 import TotalSVG from "../../assets/total.svg"
 import { currencyFormatter } from "../../utils/useFormatter"
+import { useTransaction } from "../../hooks/useTransaction"
 
 type TSummaryValues = {
   total: number
@@ -15,37 +13,22 @@ type TSummaryValues = {
 }
 
 export const Summary = () => {
-  const { transactions } = useContext(TransactionsContext)
+  const { transactions } = useTransaction()
 
-  const [summaryValues, setSummaryValues] =
-    useState<TSummaryValues>({
-      total: 0,
+  const { income, outcome } = transactions.reduce(
+    (acc, transaction) => {
+      if (transaction.type === "income")
+        acc.income += +transaction.value
+      if (transaction.type === "outcome")
+        acc.outcome -= +transaction.value
+
+      return acc
+    },
+    {
       income: 0,
       outcome: 0,
-    })
-  const { total, income, outcome } = summaryValues
-
-  useEffect(() => {
-    let transactionsIncome = 0
-    let transactionsOutcome = 0
-
-    transactions.forEach((transaction) => {
-      const transactionType = transaction["type"]
-      const transactionValue = +transaction["value"] ?? 0
-
-      if (transactionType === "income")
-        transactionsIncome += transactionValue
-
-      if (transactionType === "outcome")
-        transactionsOutcome -= transactionValue
-    })
-
-    setSummaryValues({
-      total: transactionsIncome + transactionsOutcome,
-      income: transactionsIncome,
-      outcome: transactionsOutcome,
-    })
-  }, [transactions])
+    }
+  )
 
   return (
     <Container>
@@ -70,7 +53,9 @@ export const Summary = () => {
           <p>Total</p>
           <img src={TotalSVG} alt="total" />
         </header>
-        <strong>{currencyFormatter.format(total)}</strong>
+        <strong>
+          {currencyFormatter.format(income + outcome)}
+        </strong>
       </div>
     </Container>
   )

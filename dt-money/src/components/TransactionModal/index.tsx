@@ -1,10 +1,7 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useState,
-} from "react"
-import { TransactionsContext } from "../../context/TransactionsContext"
+import type { TransactionPost } from "../../context/TransactionsContext"
+
+import { ChangeEvent, FormEvent, useState } from "react"
+import { useTransaction } from "../../hooks/useTransaction"
 
 import {
   DialogClose,
@@ -21,7 +18,6 @@ import { Portal as DialogPortal } from "@radix-ui/react-dialog"
 import incomeImg from "../../assets/income.svg"
 import outcomeImg from "../../assets/outcome.svg"
 import { X } from "phosphor-react"
-import { api } from "../../services/api"
 
 type TFormData = {
   title: string
@@ -29,18 +25,8 @@ type TFormData = {
   category: string
 }
 
-type TPostData = {
-  title: string
-  category: string
-  type: "income" | "outcome"
-  value: number
-  createdAt: Date
-}
-
 export const TransactionModal = () => {
-  const { handleUpdateTransactionsArray } = useContext(
-    TransactionsContext
-  )
+  const { handleUpdateTransactionsArray } = useTransaction()
   const [formData, setFormData] = useState<TFormData>({
     category: "",
     title: "",
@@ -54,17 +40,14 @@ export const TransactionModal = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
-    const data: TPostData = {
+    const data: TransactionPost = {
       type,
       ...formData,
       value: +formData.value,
       createdAt: new Date(),
     }
 
-    const res = await api.post("/transactions", data)
-    const newTransactions = res.data["transaction"]
-    if (newTransactions)
-      handleUpdateTransactionsArray(newTransactions)
+    handleUpdateTransactionsArray(data)
   }
 
   const handleChange = (
