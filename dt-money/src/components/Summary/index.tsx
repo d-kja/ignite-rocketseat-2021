@@ -26,27 +26,22 @@ export const Summary = () => {
   const { total, income, outcome } = summaryValues
 
   useEffect(() => {
-    let transactionsTotal = 0
     let transactionsIncome = 0
     let transactionsOutcome = 0
-    console.log(transactions)
 
     transactions.forEach((transaction) => {
       const transactionType = transaction["type"]
       const transactionValue = +transaction["value"] ?? 0
 
-      if (transactionType === "income") {
-        transactionsTotal += transactionValue
+      if (transactionType === "income")
         transactionsIncome += transactionValue
-      }
-      if (transactionType === "outcome") {
-        transactionsTotal -= transactionValue
+
+      if (transactionType === "outcome")
         transactionsOutcome -= transactionValue
-      }
     })
 
     setSummaryValues({
-      total: transactionsTotal,
+      total: transactionsIncome + transactionsOutcome,
       income: transactionsIncome,
       outcome: transactionsOutcome,
     })

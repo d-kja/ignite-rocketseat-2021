@@ -1,7 +1,11 @@
 export const currencyFormatter = new Intl.NumberFormat(
-  "pt-BR",
+  "en-US",
   {
     style: "currency",
-    currency: "BRL",
+    currency: "USD",
   }
+)
+
+export const dateFormatter = new Intl.DateTimeFormat(
+  "en-US"
 )

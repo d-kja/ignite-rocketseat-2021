@@ -23,16 +23,24 @@ export const TransactionTable = () => {
 
         <tbody>
           {transactions.map(
-            ({ category, date, title, type, value }) => (
-              <TableItem
-                title={title}
-                category={category}
-                type={type}
-                value={value}
-                date={new Date(date)}
-                key={crypto.randomUUID()}
-              />
-            )
+            ({
+              category,
+              createdAt,
+              title,
+              type,
+              value,
+            }) => {
+              return (
+                <TableItem
+                  title={title}
+                  category={category}
+                  type={type}
+                  value={value}
+                  createdAt={createdAt}
+                  key={crypto.randomUUID()}
+                />
+              )
+            }
           )}
         </tbody>
       </table>

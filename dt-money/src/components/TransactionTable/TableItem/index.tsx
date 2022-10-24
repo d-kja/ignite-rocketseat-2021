@@ -1,10 +1,13 @@
-import { currencyFormatter } from "../../../utils/useFormatter"
+import {
+  currencyFormatter,
+  dateFormatter,
+} from "../../../utils/useFormatter"
 
 export interface TableItemProps {
   title: string
   value: string | number
   category: string
-  date: Date
+  createdAt: string
   type: "income" | "outcome"
 }
 
@@ -13,7 +16,7 @@ export const TableItem = ({
   category,
   type,
   value,
-  date,
+  createdAt,
 }: TableItemProps) => {
   return (
     <tr>
@@ -23,7 +26,8 @@ export const TableItem = ({
         {currencyFormatter.format(+value)}
       </td>
       <td>{category}</td>
-      <td>{date.toLocaleDateString()}</td>
+      <td>{dateFormatter.format(new Date(createdAt))}</td>
+      {/* new Date(createdAt).toLocaleDateString() */}
     </tr>
   )
 }

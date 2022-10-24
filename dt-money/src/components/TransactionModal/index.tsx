@@ -34,7 +34,7 @@ type TPostData = {
   category: string
   type: "income" | "outcome"
   value: number
-  date: Date
+  createdAt: Date
 }
 
 export const TransactionModal = () => {
@@ -58,7 +58,7 @@ export const TransactionModal = () => {
       type,
       ...formData,
       value: +formData.value,
-      date: new Date(),
+      createdAt: new Date(),
     }
 
     const res = await api.post("/transactions", data)

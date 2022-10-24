@@ -6,24 +6,31 @@ import { createServer, Model } from "miragejs"
 
 const data = [
   {
+    id: 1,
     title: "Website development",
     category: "Development",
     type: "income",
     value: 2000,
-    date: new Date(),
+    createdAt: new Date("2022-08-21 09:00:00"),
   },
   {
+    id: 2,
     title: "Software development",
     category: "Development",
     type: "outcome",
     value: 700,
-    date: new Date(),
+    createdAt: new Date("2022-08-21 09:00:00"),
   },
 ]
 
 createServer({
   models: {
     transaction: Model,
+  },
+  seeds(server) {
+    server.db.loadData({
+      transactions: data,
+    })
   },
   routes() {
     this.namespace = "api"
