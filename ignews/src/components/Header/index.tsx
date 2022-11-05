@@ -5,6 +5,7 @@ import Logo from "../../../public/images/ig.news.svg"
 import Styles from "./styles.module.scss"
 
 import { SignInWithGithub } from "./SignInWithGithub"
+import Link from "next/link"
 
 export const Header = () => {
   const { pathname } = useRouter()
@@ -18,22 +19,22 @@ export const Header = () => {
           loading="lazy"
         />
         <nav>
-          <a
-            href="#"
+          <Link
+            href="/"
             className={
               pathname === "/" ? Styles.active : ""
             }
           >
             Home
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            href="/posts"
             className={
               pathname === "/posts" ? Styles.active : ""
             }
           >
             Posts
-          </a>
+          </Link>
         </nav>
         <SignInWithGithub />
       </div>
