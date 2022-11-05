@@ -1,5 +1,6 @@
+"use client"
+
 import Image from "next/image"
-import { useRouter } from "next/router"
 
 import Logo from "../../../public/images/ig.news.svg"
 import Styles from "./styles.module.scss"
@@ -7,9 +8,11 @@ import Styles from "./styles.module.scss"
 import { SignInWithGithub } from "./SignInWithGithub"
 import Link from "next/link"
 
-export const Header = () => {
-  const { pathname } = useRouter()
+interface HeaderProps {
+  pathname?: string
+}
 
+export const Header = ({ pathname = "" }: HeaderProps) => {
   return (
     <header className={Styles.headerContainer}>
       <div className={Styles.headerContent}>

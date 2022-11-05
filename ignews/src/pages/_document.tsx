@@ -11,10 +11,6 @@ export default class _document extends Document {
       <Html>
         <Head>
           <link
-            rel="shortcut icon"
-            href="images/favicon.png"
-          />
-          <link
             rel="preconnect"
             href="https://fonts.googleapis.com"
           />

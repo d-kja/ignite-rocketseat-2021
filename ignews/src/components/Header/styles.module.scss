@@ -57,6 +57,33 @@
           background-color: var(--yellow-500);
         }
       }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:focus-within {
+        position: relative;
+
+        color: var(--white);
+        font-weight: bold;
+
+        &::after {
+          content: "";
+
+          width: 100%;
+          height: 3px;
+
+          border-radius: 3px 3px 0 0;
+
+          position: absolute;
+          bottom: 1px;
+          left: 0;
+          right: 0;
+
+          background-color: var(--yellow-500);
+        }
+      }
     }
   }
 
