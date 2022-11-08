@@ -35,7 +35,12 @@
         margin-left: 2rem;
       }
 
-      &.active {
+      &:focus {
+        outline: none;
+      }
+
+      &.active,
+      &:focus-within {
         position: relative;
 
         color: var(--white);
