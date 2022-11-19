@@ -69,3 +69,17 @@
     margin-left: auto;
   }
 }
+
+@media (max-width: 720px) {
+  .headerContent {
+    nav {
+      margin-left: 1.5rem;
+
+      a {
+        &:not(:first-child) {
+          margin-left: 1rem;
+        }
+      }
+    }
+  }
+}

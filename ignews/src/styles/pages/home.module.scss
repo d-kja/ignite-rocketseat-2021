@@ -44,3 +44,34 @@
     margin-top: 2.5rem;
   }
 }
+
+@media (max-width: 720px) {
+  .container {
+    flex-direction: column-reverse;
+    margin: 2rem auto;
+
+    img {
+      display: block;
+      height: 100%;
+    }
+  }
+
+  .hero {
+    margin-top: 2rem;
+
+    > span {
+      font-size: 1.5rem;
+    }
+    h1 {
+      font-size: 3rem;
+      line-height: 3rem;
+    }
+    p {
+      font-size: 1.35rem;
+      line-height: 2rem;
+    }
+    button {
+      margin-top: 1.5rem;
+    }
+  }
+}
