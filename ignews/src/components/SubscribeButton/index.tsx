@@ -1,5 +1,7 @@
 import { signIn, useSession } from "next-auth/react"
 import React from "react"
+import { api } from "../../services/api"
+import { loadStripeJs } from "../../services/stripe-js"
 
 import styles from "./styles.module.scss"
 
@@ -21,7 +23,17 @@ export const SubscribeButton = ({
       return
     }
 
-    // fetch("http://localhost:3000/api/stripe/checkout
+    try {
+      const response = await api.post("/stripe/checkout")
+      const { sessionId } = response.data
+
+      const stripe = await loadStripeJs()
+      await stripe.redirectToCheckout({
+        sessionId,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
