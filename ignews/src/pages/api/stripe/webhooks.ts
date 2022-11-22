@@ -1,7 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { Readable } from "stream"
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { Readable } from "stream"
 import Stripe from "stripe"
 import { stripe } from "../../../services/stripe"
+import { saveSubscriptions } from "./_lib/manageSubscription"
 
 const relevantEvents = new Set([
   "checkout.session.completed",
@@ -50,12 +51,39 @@ export default async function handler(
     const { type } = event
 
     if (relevantEvents.has(type)) {
-      console.log(event);
+      try {
+        switch (type) {
+          case "checkout.session.completed":
+            const checkoutSession = event.data
+              .object as Stripe.Checkout.Session
+
+            await saveSubscriptions({
+              customerId:
+                checkoutSession.customer.toString(),
+              subscriptionId:
+                checkoutSession.subscription.toString(),
+            })
+
+            break
+
+          default:
+            throw new Error(
+              `Unhandled webhook event (${type})`
+            )
+        }
+      } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+          "event-type": type,
+          "webhook-error": error.message,
+        })
+      }
     }
 
-    res
-      .status(200)
-      .json({ "event-type": type,"event-status": "received" })
+    res.status(200).json({
+      "event-type": type,
+      "event-status": "received",
+    })
   } else {
     res
       .status(405)

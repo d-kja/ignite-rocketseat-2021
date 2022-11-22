@@ -1,5 +1,5 @@
 import { signIn, useSession } from "next-auth/react"
-import React from "react"
+import React, { useState } from "react"
 import { api } from "../../services/api"
 import { loadStripeJs } from "../../services/stripe-js"
 
@@ -12,6 +12,7 @@ interface SubscribeButtonProps {
 export const SubscribeButton = ({
   productId,
 }: SubscribeButtonProps) => {
+  const [loading, setLoading] = useState<boolean>(false)
   const { data: session } = useSession()
   const buttonText = session
     ? "Subscribe now"
@@ -24,6 +25,8 @@ export const SubscribeButton = ({
     }
 
     try {
+      setLoading(true)
+
       const response = await api.post("/stripe/checkout")
       const { sessionId } = response.data
 
@@ -34,15 +37,18 @@ export const SubscribeButton = ({
     } catch (error) {
       console.log(error)
     }
+
+    setLoading(false)
   }
 
   return (
     <button
+      disabled={loading}
       type="button"
       className={styles.container}
       onClick={handleSubscribe}
     >
-      {buttonText}
+      {loading ? "Loading..." : buttonText}
     </button>
   )
 }
