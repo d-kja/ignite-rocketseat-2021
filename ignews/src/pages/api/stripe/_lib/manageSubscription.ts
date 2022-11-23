@@ -9,6 +9,7 @@ import { stripe } from "../../../../services/stripe"
 export async function saveSubscriptions({
   subscriptionId,
   customerId,
+  createAction = false,
 }: saveSubscriptionsTypes) {
   const userRef = await fauna.query(
     q.Select(
@@ -30,9 +31,55 @@ export async function saveSubscriptions({
     price_id: subscription.items.data[0].price.id,
   }
 
-  await fauna.query(
-    q.Create(q.Collection("subscriptions"), {
-      data: subscriptionData,
-    })
-  )
+  if (createAction) {
+    await fauna.query(
+      q.If(
+        q.Not(
+          q.Exists(
+            q.Match(
+              q.Index("subscription_by_customer_ref"),
+              userRef
+            )
+          )
+        ),
+        q.Create(q.Collection("subscriptions"), {
+          data: {
+            ...subscriptionData,
+            status: "processing", // Handle subscription request completion
+          },
+        }),
+        q.Replace(
+          q.Select(
+            "ref",
+            q.Get(
+              q.Match(
+                q.Index("subscription_by_customer_ref"),
+                userRef
+              )
+            )
+          ),
+          {
+            data: subscriptionData,
+          }
+        )
+      )
+    )
+  } else {
+    await fauna.query(
+      q.Replace(
+        q.Select(
+          "ref",
+          q.Get(
+            q.Match(
+              q.Index("subscription_by_id"),
+              subscriptionId
+            )
+          )
+        ),
+        {
+          data: subscriptionData,
+        }
+      )
+    )
+  }
 }
