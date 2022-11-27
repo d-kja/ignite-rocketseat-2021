@@ -1,4 +1,5 @@
 import { signIn, useSession } from "next-auth/react"
+import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { api } from "../../services/api"
 import { loadStripeJs } from "../../services/stripe-js"
@@ -14,6 +15,7 @@ export const SubscribeButton = ({
 }: SubscribeButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const { data: session } = useSession()
+  const router = useRouter()
   const buttonText = session
     ? "Subscribe now"
     : "Sign in first!"
@@ -21,6 +23,11 @@ export const SubscribeButton = ({
   const handleSubscribe = async () => {
     if (!session) {
       signIn("github")
+      return
+    }
+
+    if ((session as any)?.subscription) {
+      router.push("/posts")
       return
     }
 

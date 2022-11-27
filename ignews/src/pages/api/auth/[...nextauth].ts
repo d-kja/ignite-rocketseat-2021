@@ -22,6 +22,45 @@ export const authOptions: NextAuthOptions = {
 
   // Callbacks
   callbacks: {
+    async session({ session }) {
+      const {
+        user: { email },
+      } = session
+
+      try {
+        const subscription = await fauna.query(
+          q.Get(
+            q.Intersection([
+              q.Match(
+                q.Index("subscription_by_customer_ref"),
+                q.Select(
+                  "ref",
+                  q.Get(
+                    q.Match(
+                      q.Index("user_by_email"),
+                      q.Casefold(email)
+                    )
+                  )
+                )
+              ),
+              q.Match(
+                q.Index("subscription_by_status"),
+                "active"
+              ),
+            ])
+          )
+        )
+
+        return {
+          ...session,
+          subscription,
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
+      return { ...session, subscription: null }
+    },
     async signIn({ user }) {
       const { name, email } = user
 
