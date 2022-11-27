@@ -1,0 +1,57 @@
+.Post {
+  display: block;
+  position: relative;
+
+  & + a {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--gray-600);
+
+    &:focus-within::after {
+      top: 12px;
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+  &:focus-within::after {
+    content: "";
+
+    position: absolute;
+    inset: -12px;
+
+    border: 3px solid var(--gray-600);
+    border-radius: 14px;
+  }
+
+  time {
+    font-size: 1rem;
+    color: var(--gray-300);
+
+    display: flex;
+    gap: 0.2rem;
+
+    align-items: center;
+  }
+
+  strong {
+    display: block;
+    margin-top: 1rem;
+
+    font-size: 1.5rem;
+    line-height: 2rem;
+
+    transition: color 0.2s;
+  }
+
+  p {
+    color: var(--gray-300);
+    margin-top: 0.5rem;
+    line-height: 1.625rem;
+  }
+
+  &:hover strong {
+    color: var(--yellow-500);
+  }
+}

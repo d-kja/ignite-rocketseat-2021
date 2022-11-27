@@ -28,4 +28,14 @@
   &:focus {
     outline: none;
   }
+
+  &:focus-within::before {
+    content: "";
+
+    position: absolute;
+    inset: -6px;
+
+    border: 3px solid var(--gray-700);
+    border-radius: 3rem;
+  }
 }

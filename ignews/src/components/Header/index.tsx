@@ -1,15 +1,12 @@
 import Image from "next/image"
-import { useRouter } from "next/router"
 
 import Logo from "../../../public/images/ig.news.svg"
 import Styles from "./styles.module.scss"
 
 import { SignInWithGithub } from "./SignInWithGithub"
-import Link from "next/link"
+import { ActiveLink } from "./ActiveLink"
 
 export const Header = () => {
-  const { pathname } = useRouter()
-
   return (
     <header className={Styles.headerContainer}>
       <div className={Styles.headerContent}>
@@ -19,22 +16,18 @@ export const Header = () => {
           loading="lazy"
         />
         <nav>
-          <Link
+          <ActiveLink
+            activeClassName={Styles.active}
             href="/"
-            className={
-              pathname === "/" ? Styles.active : ""
-            }
           >
-            Home
-          </Link>
-          <Link
+            <span>Home</span>
+          </ActiveLink>
+          <ActiveLink
+            activeClassName={Styles.active}
             href="/posts"
-            className={
-              pathname === "/posts" ? Styles.active : ""
-            }
           >
-            Posts
-          </Link>
+            <span>Posts</span>
+          </ActiveLink>
         </nav>
         <SignInWithGithub />
       </div>
