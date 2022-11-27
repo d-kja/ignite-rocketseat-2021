@@ -16,7 +16,7 @@ export const ActiveLink = ({
   const { pathname, asPath } = useRouter()
 
   const className =
-    asPath === props.href ? activeClassName : ""
+    pathname === props.href ? activeClassName : ""
 
   return (
     <Link {...props} className={className}>
