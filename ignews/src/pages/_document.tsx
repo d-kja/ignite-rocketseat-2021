@@ -12,7 +12,7 @@ export default class _document extends Document {
         <Head>
           <link
             rel="shortcut icon"
-            href="images/favicon.png"
+            href="/images/favicon.png"
           />
           <link
             rel="preconnect"

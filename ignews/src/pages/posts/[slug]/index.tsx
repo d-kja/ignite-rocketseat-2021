@@ -48,14 +48,6 @@ export const getServerSideProps: GetServerSideProps =
 
     const subscription = (session as any)?.subscription
 
-    if (!session)
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      }
-
     if (!subscription)
       return {
         redirect: {
