@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 
 import Head from 'next/head';
@@ -13,6 +13,7 @@ import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import Header from '../components/Header';
 
 interface Post {
   uid?: string;
@@ -33,7 +34,7 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home({ postsPagination }: HomeProps): ReactNode {
+export default function Home({ postsPagination }: HomeProps): JSX.Element {
   const [posts, setPosts] = useState(postsPagination.results);
   const [nextPageUrl, setNextPageUrl] = useState(postsPagination.next_page);
 
@@ -45,20 +46,14 @@ export default function Home({ postsPagination }: HomeProps): ReactNode {
 
         const postResults: Post[] = data.results.map(result => ({
           uid: result.uid,
-          first_publication_date: format(
-            new Date(result.first_publication_date),
-            'dd MMM yyyy',
-            {
-              locale: ptBR,
-            }
-          ),
+          first_publication_date: result.first_publication_date,
           data: {
             title: result.data.title,
             subtitle: result.data.subtitle,
             author: result.data.author,
           },
         }));
-        console.log(postResults);
+
         setPosts(prev => [...prev, ...postResults]);
       });
   }
@@ -71,7 +66,7 @@ export default function Home({ postsPagination }: HomeProps): ReactNode {
 
       <main className={commonStyles.container}>
         <div className={commonStyles.content}>
-          <img src="/images/Logo.svg" alt="logo" className={styles.icon} />
+          <Header />
           <section className={styles.posts}>
             {posts.map(post => (
               <Link href={`/post/${post.uid}`} key={post.uid}>
@@ -86,7 +81,14 @@ export default function Home({ postsPagination }: HomeProps): ReactNode {
 
                   <aside className={styles.post_info}>
                     <time>
-                      <FiCalendar size={20} /> {post.first_publication_date}
+                      <FiCalendar size={20} />
+                      {format(
+                        new Date(post.first_publication_date),
+                        'dd MMM yyyy',
+                        {
+                          locale: ptBR,
+                        }
+                      )}
                     </time>
                     <span>
                       <FiUser size={20} />
@@ -118,13 +120,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const postResults: Post[] = postsResponse.results.map(result => ({
     uid: result.uid,
-    first_publication_date: format(
-      new Date(result.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: result.first_publication_date,
     data: {
       title: result.data.title,
       subtitle: result.data.subtitle,
