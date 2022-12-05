@@ -65,7 +65,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
       </Head>
 
       <main className={commonStyles.container}>
-        <div className={commonStyles.content}>
+        <div className={`${commonStyles.content} ${styles.content}`}>
           <Header />
           <section className={styles.posts}>
             {posts.map(post => (
