@@ -1,6 +1,7 @@
 import { asHTML, asText } from '@prismicio/helpers';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -10,13 +11,15 @@ import Header from '../../components/Header';
 
 import { getPrismicClient } from '../../services/prismic';
 
-import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
   data: {
+    uid: string;
+
     title: string;
+    subtitle: string;
     banner: {
       url: string;
     };
@@ -35,19 +38,9 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps): JSX.Element {
-  if (!post)
-    return (
-      <main
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        Carregando...
-      </main>
-    );
+  const router = useRouter();
+
+  if (router.isFallback) return <>Carregando...</>;
 
   const entireTextChunk: any = post?.data.content.reduce((acc, current) => {
     const textChunk = asText(current.body as any) + current.heading;
@@ -149,17 +142,23 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const response = await prismic.getByUID('post', String(slug), {});
 
+    const formattedTitle = response.data?.title
+      .toLowerCase()
+      .replace(/\s+/g, '-');
+
     const post: Post = {
+      first_publication_date: response?.first_publication_date,
       data: {
         author: response.data.author,
         banner: response.data.banner,
         content: response.data.content,
+        subtitle: response.data.subtitle,
         title: response.data.title,
+        uid: formattedTitle,
       },
-      first_publication_date: response?.first_publication_date,
     };
 
-    console.log(response?.data);
+    console.log(response?.data, formattedTitle);
 
     return {
       props: {
