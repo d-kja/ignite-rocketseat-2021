@@ -1,14 +1,32 @@
 import { useRouter } from "next/router"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 // Components
 import { Button, Flex, Stack } from "@chakra-ui/react"
-import InputWithLabel from "../components/Form/InputWithLabel"
+import { InputWithLabel } from "../components/Form/InputWithLabel"
+
+type SignInFormData = {
+  email: string
+  password: string
+}
 
 export default function SignIn() {
   const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInFormData>()
 
-  const handleSignIn = async () => {
-    router.push("/dashboard")
+  const handleSignIn: SubmitHandler<
+    SignInFormData
+  > = async (data) => {
+    await new Promise((resolve, reject) => {
+      setTimeout(resolve, 2000)
+    })
+
+    // router.push("/dashboard")
+    console.log(data)
   }
 
   return (
@@ -20,7 +38,7 @@ export default function SignIn() {
     >
       <Flex
         as="form"
-        onSubmit={handleSignIn}
+        onSubmit={handleSubmit(handleSignIn)}
         w="100%"
         maxW="360px"
         bg="gray.800"
@@ -31,14 +49,14 @@ export default function SignIn() {
         <Stack spacing="4">
           <InputWithLabel
             label="E-mail"
-            name="email"
             type="email"
+            {...register("email")}
           />
 
           <InputWithLabel
             label="Password"
-            name="password"
             type="password"
+            {...register("password")}
           />
         </Stack>
 
@@ -47,6 +65,7 @@ export default function SignIn() {
           mt="6"
           size="lg"
           type="submit"
+          isLoading={isSubmitting}
         >
           Entrar
         </Button>

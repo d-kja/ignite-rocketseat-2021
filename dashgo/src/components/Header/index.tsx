@@ -1,4 +1,11 @@
-import { Flex } from "@chakra-ui/react"
+import {
+  Flex,
+  Icon,
+  IconButton,
+  useBreakpointValue,
+} from "@chakra-ui/react"
+import { List } from "phosphor-react"
+import { useSidebarDrawer } from "../../context/SidebarDrawerContext"
 
 import Logo from "./Logo"
 import NotificationsNav from "./NotificationsNav"
@@ -6,6 +13,12 @@ import ProfileNav from "./ProfileNav"
 import SearchBar from "./SearchBar"
 
 function Header() {
+  const { onOpen } = useSidebarDrawer()
+  const isDesktopSize = useBreakpointValue({
+    base: false,
+    lg: true,
+  })
+
   return (
     <Flex
       as="header"
@@ -18,13 +31,25 @@ function Header() {
       justify="center"
       px="6"
     >
+      {!isDesktopSize && (
+        <IconButton
+          icon={<Icon as={List} />}
+          colorScheme="pink"
+          fontSize="24"
+          variant="unstyled"
+          onClick={onOpen}
+          aria-label="Open navigation drawer"
+          mr="2"
+        />
+      )}
+
       <Logo />
 
-      <SearchBar />
+      {isDesktopSize && <SearchBar />}
 
       <Flex align="center" ml="auto">
         <NotificationsNav />
-        <ProfileNav />
+        <ProfileNav showProfileData={isDesktopSize} />
       </Flex>
     </Flex>
   )

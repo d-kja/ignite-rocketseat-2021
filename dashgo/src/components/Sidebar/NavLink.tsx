@@ -1,7 +1,8 @@
 import { ElementType } from "react"
-import { Icon, Link, Text } from "@chakra-ui/react"
 
-import type { LinkProps } from "@chakra-ui/react"
+import { Icon, Link, Text } from "@chakra-ui/react"
+import { ActiveLink } from "../ActiveLink"
+import { LinkProps } from "next/link"
 
 interface NavLinkProps extends LinkProps {
   children: string
@@ -14,11 +15,13 @@ export default function NavLink({
   ...props
 }: NavLinkProps) {
   return (
-    <Link display="flex" alignItems="center" {...props}>
-      <Icon as={icon} fontSize="22" />
-      <Text ml="4" fontWeight="medium">
-        {children}
-      </Text>
-    </Link>
+    <ActiveLink {...props} prefetch>
+      <Link alignItems="center" display="flex">
+        <Icon as={icon} fontSize="22" />
+        <Text ml="4" fontWeight="medium">
+          {children}
+        </Text>
+      </Link>
+    </ActiveLink>
   )
 }

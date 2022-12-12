@@ -1,41 +1,47 @@
 import {
   Box,
-  Icon,
-  Link,
-  Stack,
-  Text,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  useBreakpointValue,
 } from "@chakra-ui/react"
-import {
-  SquaresFour,
-  UserList,
-  Textbox,
-  GitBranch,
-} from "phosphor-react"
-import NavLink from "./NavLink"
-import NavSection from "./NavSection"
+import { useSidebarDrawer } from "../../context/SidebarDrawerContext"
+import { SidebarBody } from "./SidebarBody"
 
 export default function Sidebar() {
+  const { isOpen, onClose } = useSidebarDrawer()
+  const isFloatingSidebar = useBreakpointValue({
+    base: true,
+    lg: false,
+  })
+
+  if (isFloatingSidebar) {
+    return (
+      <Drawer
+        isOpen={isOpen}
+        onClose={onClose}
+        placement="left"
+      >
+        <DrawerOverlay>
+          <DrawerContent bg="gray.800" p="4">
+            <DrawerCloseButton mt="6" />
+            <DrawerHeader>Navigation</DrawerHeader>
+
+            <DrawerBody>
+              <SidebarBody />
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+    )
+  }
+
   return (
     <Box as="aside" w="64" mr="8">
-      <Stack spacing="12" align="flex-start">
-        <NavSection title="GENERAL">
-          <NavLink href="/dashboard" icon={SquaresFour}>
-            Dashboard
-          </NavLink>
-          <NavLink href="/users" icon={UserList}>
-            Users
-          </NavLink>
-        </NavSection>
-
-        <NavSection title="AUTOMATION">
-          <NavLink href="/" icon={Textbox}>
-            Forms
-          </NavLink>
-          <NavLink href="/" icon={GitBranch}>
-            Automation
-          </NavLink>
-        </NavSection>
-      </Stack>
+      <SidebarBody />
     </Box>
   )
 }
