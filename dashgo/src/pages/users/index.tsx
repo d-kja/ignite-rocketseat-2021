@@ -21,6 +21,7 @@ import Header from "../../components/Header"
 import Sidebar from "../../components/Sidebar"
 import Pagination from "../../components/Pagination"
 import Link from "next/link"
+import Head from "next/head"
 
 export default function UserList() {
   const isDesktopSize = useBreakpointValue({
@@ -30,6 +31,9 @@ export default function UserList() {
 
   return (
     <Box>
+      <Head>
+        <title>Users | Dashgo.</title>
+      </Head>
       <Header />
 
       <Flex w="100%" maxW={1480} mx="auto" my="6" px="6">
@@ -47,7 +51,7 @@ export default function UserList() {
 
             <Link href="/users/create" passHref>
               <Button
-                as="a"
+                as="span"
                 size="sm"
                 fontSize="sm"
                 colorScheme="pink"

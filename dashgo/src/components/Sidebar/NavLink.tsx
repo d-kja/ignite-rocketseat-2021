@@ -16,7 +16,7 @@ export default function NavLink({
 }: NavLinkProps) {
   return (
     <ActiveLink {...props} prefetch>
-      <Link alignItems="center" display="flex">
+      <Link as="span" alignItems="center" display="flex">
         <Icon as={icon} fontSize="22" />
         <Text ml="4" fontWeight="medium">
           {children}

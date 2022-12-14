@@ -20,6 +20,7 @@ import {
 } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import Head from "next/head"
 
 interface CreateNewUserData {
   name: string
@@ -65,6 +66,10 @@ export default function CreateUser() {
 
   return (
     <Box>
+      <Head>
+        <title>Create user | Dashgo.</title>
+      </Head>
+
       <Header />
 
       <Flex w="100%" maxW={1480} mx="auto" my="6" px="6">
