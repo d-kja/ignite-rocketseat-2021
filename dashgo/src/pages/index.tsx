@@ -1,5 +1,12 @@
 import { useRouter } from "next/router"
-import { SubmitHandler, useForm } from "react-hook-form"
+
+import {
+  Controller,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 
 // Components
 import { Button, Flex, Stack } from "@chakra-ui/react"
@@ -10,13 +17,32 @@ type SignInFormData = {
   password: string
 }
 
+const signInFormSchema = yup.object({
+  email: yup
+    .string()
+    .required("E-mail is required")
+    .email("E-mail is invalid"),
+  password: yup.string().required("Password is required"),
+})
+
 export default function SignIn() {
   const router = useRouter()
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<SignInFormData>()
+    control,
+    formState: { isSubmitting },
+    watch,
+  } = useForm<SignInFormData>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(signInFormSchema),
+  })
+
+  const fields = watch()
+  console.log("input values", fields)
 
   const handleSignIn: SubmitHandler<
     SignInFormData
@@ -25,8 +51,7 @@ export default function SignIn() {
       setTimeout(resolve, 2000)
     })
 
-    // router.push("/dashboard")
-    console.log(data)
+    router.push("/dashboard")
   }
 
   return (
@@ -47,16 +72,30 @@ export default function SignIn() {
         p="8"
       >
         <Stack spacing="4">
-          <InputWithLabel
-            label="E-mail"
-            type="email"
-            {...register("email")}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <InputWithLabel
+                label="E-mail"
+                type="email"
+                error={error}
+                {...field}
+              />
+            )}
           />
 
-          <InputWithLabel
-            label="Password"
-            type="password"
-            {...register("password")}
+          <Controller
+            name="password"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <InputWithLabel
+                label="Password"
+                type="password"
+                error={error}
+                {...field}
+              />
+            )}
           />
         </Stack>
 

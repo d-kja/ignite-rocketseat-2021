@@ -1,3 +1,4 @@
+import Link from "next/link"
 import {
   Box,
   Button,
@@ -11,9 +12,57 @@ import {
 import Header from "../../components/Header"
 import Sidebar from "../../components/Sidebar"
 import { InputWithLabel } from "../../components/Form/InputWithLabel"
-import Link from "next/link"
+
+import {
+  useForm,
+  Controller,
+  SubmitHandler,
+} from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+
+interface CreateNewUserData {
+  name: string
+  email: string
+  password: string
+  passwordConfirmation: string
+}
+
+const createNewUserSchema = yup.object({
+  name: yup.string().required("Name is required"),
+  email: yup
+    .string()
+    .required("E-mail is required")
+    .email("E-mail is invalid"),
+  password: yup.string().required("Password is required"),
+  passwordConfirmation: yup
+    .string()
+    .oneOf(
+      [null, yup.ref("password")],
+      "Passwords must match"
+    ),
+})
 
 export default function CreateUser() {
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<CreateNewUserData>({
+    resolver: yupResolver(createNewUserSchema),
+  })
+
+  const handleCreateUser: SubmitHandler<
+    CreateNewUserData
+  > = async (data) => {
+    await new Promise((resolve, reject) => {
+      setTimeout(resolve, 2000)
+    })
+
+    console.log(data)
+  }
+
   return (
     <Box>
       <Header />
@@ -22,6 +71,8 @@ export default function CreateUser() {
         <Sidebar />
 
         <Box
+          as="form"
+          onSubmit={handleSubmit(handleCreateUser)}
           flex="1"
           borderRadius={8}
           bg="gray.800"
@@ -39,18 +90,36 @@ export default function CreateUser() {
               minChildWidth={240}
               spacing={["6", "8"]}
             >
-              <InputWithLabel
-                label="Name"
-                type="text"
-                id="name"
+              <Controller
                 name="name"
+                control={control}
+                render={({
+                  field,
+                  fieldState: { error },
+                }) => (
+                  <InputWithLabel
+                    label="Name"
+                    type="text"
+                    error={error}
+                    {...field}
+                  />
+                )}
               />
 
-              <InputWithLabel
-                label="E-mail"
-                type="email"
-                id="email"
+              <Controller
+                control={control}
                 name="email"
+                render={({
+                  field,
+                  fieldState: { error },
+                }) => (
+                  <InputWithLabel
+                    label="E-mail"
+                    type="email"
+                    error={error}
+                    {...field}
+                  />
+                )}
               />
             </SimpleGrid>
 
@@ -59,18 +128,36 @@ export default function CreateUser() {
               minChildWidth={240}
               spacing={["6", "8"]}
             >
-              <InputWithLabel
-                label="Password"
-                type="password"
-                id="password"
+              <Controller
+                control={control}
                 name="password"
+                render={({
+                  field,
+                  fieldState: { error },
+                }) => (
+                  <InputWithLabel
+                    label="Password"
+                    type="password"
+                    error={error}
+                    {...field}
+                  />
+                )}
               />
 
-              <InputWithLabel
-                label="Confirm password"
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
+              <Controller
+                control={control}
+                name="passwordConfirmation"
+                render={({
+                  field,
+                  fieldState: { error },
+                }) => (
+                  <InputWithLabel
+                    label="Confirm password"
+                    type="password"
+                    error={error}
+                    {...field}
+                  />
+                )}
               />
             </SimpleGrid>
           </Stack>
@@ -78,14 +165,17 @@ export default function CreateUser() {
           <Flex mt="8" justify="flex-end" gap="2">
             <Link href="/users">
               <Button
-                as="a"
                 type="button"
                 colorScheme="whiteAlpha"
               >
                 Cancel
               </Button>
             </Link>
-            <Button colorScheme="pink" type="submit">
+            <Button
+              colorScheme="pink"
+              type="submit"
+              isLoading={isSubmitting}
+            >
               Save
             </Button>
           </Flex>
