@@ -12,10 +12,9 @@ export default class _document extends Document {
         <Head>
           <link
             rel="shortcut icon"
-            href="/favicon.ico"
-            type="image/x-icon"
+            href="/Images/favicon.png"
+            type="image/png"
           />
-
           <link
             rel="preconnect"
             href="https://fonts.googleapis.com"
@@ -26,7 +25,7 @@ export default class _document extends Document {
             crossOrigin="true"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet"
           />
         </Head>
