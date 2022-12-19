@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  // Base colors
+  --teal-800: #1a1d23;
+  --gray-50: #f8f8f8;
+  --gray-100: #d7d7d7;
+  --gray-200: #bbbbbb;
+
+  // Highlight
+  --pink-700: #ff57b2;
+
+  // 1rem = 10px
+  font-size: 62.5%;
+  font-family: 'Inter', 'Courier New', Courier, monospace;
+}
+
+body {
+  background-color: var(--teal-800);
+  color: var(--gray-100);
+  font-size: 1.8rem;
+
+  overflow-x: hidden;
+}
+
+img {
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--gray-50);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
