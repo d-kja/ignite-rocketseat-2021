@@ -5,11 +5,11 @@ import {
   Stack,
   Text,
   useBreakpointValue,
-} from "@chakra-ui/react";
+} from "@chakra-ui/react"
 
 interface CategoryIconProps extends ImageProps {
-  icon: string;
-  label?: string;
+  icon: string
+  label?: string
 }
 
 export const CategoryIcon = ({
@@ -20,7 +20,7 @@ export const CategoryIcon = ({
   const isScreenLarge = useBreakpointValue({
     base: false,
     lg: true,
-  });
+  })
 
   return (
     <Flex
@@ -36,10 +36,16 @@ export const CategoryIcon = ({
       <Image src={icon} alt={"icon"} {...props} />
 
       {!!label && (
-        <Text fontWeight={600} fontSize={24}>
+        <Text
+          fontWeight={600}
+          fontSize={{
+            base: 18,
+            lg: 24,
+          }}
+        >
           {label}
         </Text>
       )}
     </Flex>
-  );
-};
+  )
+}

@@ -1,7 +1,8 @@
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import Link from "next/link"
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper"
+import { Swiper, SwiperSlide } from "swiper/react"
 
-import { Slide } from "./Slide";
+import { Slide } from "./Slide"
 
 export default function Slider() {
   return (
@@ -16,27 +17,33 @@ export default function Slider() {
         onSwiper={(swiper) => console.log(swiper)}
       >
         <SwiperSlide>
-          <Slide
-            src="/images/slider-images/europe.jpg"
-            title="Europa"
-            subTitle="O continente mais antigo."
-          />
+          <Link href={`/country/Europe`}>
+            <Slide
+              src="/images/slider-images/europe.jpg"
+              title="Europa"
+              subTitle="O continente mais antigo."
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Slide
-            src="/images/slider-images/europe.jpg"
-            title="Europa"
-            subTitle="O continente mais antigo."
-          />
+          <Link href={`/country/Europe`}>
+            <Slide
+              src="/images/slider-images/europe.jpg"
+              title="Europa"
+              subTitle="O continente mais antigo."
+            />
+          </Link>
         </SwiperSlide>
         <SwiperSlide>
-          <Slide
-            src="/images/slider-images/europe.jpg"
-            title="Europa"
-            subTitle="O continente mais antigo."
-          />
+          <Link href={`/country/Europe`}>
+            <Slide
+              src="/images/slider-images/europe.jpg"
+              title="Europa"
+              subTitle="O continente mais antigo."
+            />
+          </Link>
         </SwiperSlide>
       </Swiper>
     </>
-  );
+  )
 }
