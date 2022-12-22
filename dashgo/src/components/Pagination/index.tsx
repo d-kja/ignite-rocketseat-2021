@@ -1,6 +1,12 @@
 import { Box, HStack, Stack, Text } from "@chakra-ui/react"
 import PaginationButton from "./PaginationButton"
 
+interface PaginationProps {
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
+}
+
 export default function Pagination() {
   return (
     <Stack
