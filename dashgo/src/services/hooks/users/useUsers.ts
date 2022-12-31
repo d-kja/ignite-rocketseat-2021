@@ -1,4 +1,4 @@
-import { useQuery } from "react-query"
+import { useQuery, UseQueryOptions } from "react-query"
 import { api } from "../../api"
 
 export type User = {
@@ -8,21 +8,28 @@ export type User = {
   createAt: string
 }
 
-type getUsersResponse = {
+type UserResponse = Omit<User, "createAt"> & { create_at: string }
+
+export type getUsersResponse = {
   users: User[]
   totalCount: number
 }
 
-type getUsersRequest = { page: number }
+type getUsersRequest = { page?: number }
+type useUsersProps = {
+  page?: number
+  options?: UseQueryOptions<any>
+}
 
-export function useUsers({ page = 1 }) {
+export function useUsers({ page = 1, options = {} }: useUsersProps) {
   return useQuery<getUsersResponse>(["users", page], () => getUsers({ page }), {
     staleTime: 1000 * 60 * 10, // 5 seconds
+    ...options,
   })
 }
 
-const getUsers = async ({
-  page,
+export const getUsers = async ({
+  page = 1,
 }: getUsersRequest): Promise<getUsersResponse> => {
   const { data, headers } = await api.get("/users", {
     params: {
@@ -31,12 +38,11 @@ const getUsers = async ({
   })
 
   const totalCount = Number(headers["x-total-count"])
-
-  const users = data.users.map((user: User) => ({
+  const users = data.users.map((user: UserResponse) => ({
     id: user.id,
     email: user.email,
     name: user.name,
-    createAt: new Date(user.createAt).toLocaleDateString("en-US", {
+    createAt: new Date(user.create_at).toLocaleDateString("en-US", {
       day: "2-digit",
       month: "short",
       year: "numeric",

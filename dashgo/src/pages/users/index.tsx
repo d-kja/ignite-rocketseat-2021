@@ -28,14 +28,26 @@ import Head from "next/head"
 
 import { ArrowsClockwise, PencilLine, Plus } from "phosphor-react"
 
-import { useUsers } from "../../services/hooks/users/useUsers"
+import {
+  getUsers,
+  getUsersResponse,
+  useUsers,
+} from "../../services/hooks/users/useUsers"
 import { v4 as uuid } from "uuid"
 import { api } from "../../services/api"
 import { reactQueryClient } from "../../services/reactQuery/client"
+import { GetServerSideProps } from "next"
 
-export default function UserList() {
+interface UserListProps extends getUsersResponse {}
+
+export default function UserList({}: UserListProps) {
   const [page, setPage] = useState(1)
-  const { data, isLoading, error, refetch, isFetching } = useUsers({ page })
+  const { data, isLoading, error, refetch, isFetching } = useUsers({
+    page,
+    // options: {
+    //   initialData: users,
+    // },
+  })
 
   const isDesktopSize = useBreakpointValue({
     base: false,
@@ -203,4 +215,19 @@ export default function UserList() {
       </Flex>
     </Box>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const { users, totalCount } = await getUsers({ page: 1 })
+  } catch (error) {
+    console.log(error)
+  }
+
+  return {
+    props: {
+      // users,
+      // totalCount,
+    },
+  }
 }

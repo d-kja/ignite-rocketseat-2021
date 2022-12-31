@@ -20,7 +20,7 @@ export default function Pagination({
   totalPages,
   siblingsCount = 1,
 }: PaginationProps) {
-  const lastPage = Math.floor(totalPages / totalPerPage)
+  const lastPage = Math.ceil(totalPages / totalPerPage)
 
   const previousPages =
     currentPage > 1
