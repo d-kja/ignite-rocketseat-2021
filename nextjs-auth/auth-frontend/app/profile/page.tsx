@@ -1,10 +1,14 @@
-export default function Home() {
+import React from "react"
+
+const Profile = () => {
   return (
     <section
-      aria-label="require login"
+      aria-label="profile"
       className="container h-screen grid place-items-center px-2 md:px-0 mx-auto"
     >
-      Login is needed
+      User info
     </section>
   )
 }
+
+export default Profile

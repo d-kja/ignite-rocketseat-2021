@@ -1,12 +1,14 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
 import { Input } from "../Input"
 import { Button } from "../../Button"
-import { useState } from "react"
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons"
 
 type handleSubmitProps = {
@@ -21,11 +23,8 @@ const signInSchema = yup
   })
   .required()
 
-const handleSignIn: SubmitHandler<handleSubmitProps> = (data) => {
-  console.log(data)
-}
-
 export const Form = () => {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -34,12 +33,17 @@ export const Form = () => {
     resolver: yupResolver(signInSchema),
   })
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [session] = useState(false)
 
-  return (
+  const handleSignIn: SubmitHandler<handleSubmitProps> = (data) => {
+    console.log(data)
+    router.push("/profile")
+  }
+
+  return !session ? (
     <form
-      aria-describedby="login form"
       onSubmit={handleSubmit(handleSignIn)}
-      className="max-w-sm w-full flex flex-col gap-2"
+      className="max-w-sm w-full flex flex-col gap-2 mx-auto"
     >
       <Input
         label="E-mail"
@@ -58,8 +62,14 @@ export const Form = () => {
       />
 
       <Button type="submit" className="btn-primary w-full mt-2">
-        Submit
+        Sign In
       </Button>
     </form>
+  ) : (
+    <div className="mx-6 w-full">
+      <Button type="button" className="btn-secondary w-full">
+        Sign Out
+      </Button>
+    </div>
   )
 }
