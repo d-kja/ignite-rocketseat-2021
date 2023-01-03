@@ -1,5 +1,6 @@
 import "./globals.css"
 import { Form } from "./components/Form/Home/Form"
+import { AuthProvider } from "./contexts/AuthContext"
 
 export default function RootLayout({
   children,
@@ -11,13 +12,15 @@ export default function RootLayout({
       <head />
       <body>
         <main className="h-screen flex items-center justify-center">
-          <div
-            aria-label="login form"
-            className="h-full w-full flex items-center justify-center max-w-md bg-primary/10"
-          >
-            <Form />
-          </div>
-          {children}
+          <AuthProvider>
+            <div
+              aria-label="login form"
+              className="h-full w-full flex items-center justify-center max-w-md bg-primary/10"
+            >
+              <Form />
+            </div>
+            {children}
+          </AuthProvider>
         </main>
       </body>
     </html>

@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import { SubmitHandler, useForm } from "react-hook-form"
@@ -10,6 +9,7 @@ import * as yup from "yup"
 import { Input } from "../Input"
 import { Button } from "../../Button"
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons"
+import { useAuthContext } from "../../../contexts/AuthContext"
 
 type handleSubmitProps = {
   email: string
@@ -24,7 +24,8 @@ const signInSchema = yup
   .required()
 
 export const Form = () => {
-  const router = useRouter()
+  const { isAuthenticated, signIn } = useAuthContext()
+
   const {
     register,
     handleSubmit,
@@ -35,15 +36,13 @@ export const Form = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [session] = useState(false)
 
-  const handleSignIn: SubmitHandler<handleSubmitProps> = (data) => {
-    console.log(data)
-    router.push("/profile")
-  }
+  const handleSignIn: SubmitHandler<handleSubmitProps> = (data) => signIn(data)
 
   return !session ? (
     <form
       onSubmit={handleSubmit(handleSignIn)}
       className="max-w-sm w-full flex flex-col gap-2 mx-auto"
+      aria-label="form control"
     >
       <Input
         label="E-mail"

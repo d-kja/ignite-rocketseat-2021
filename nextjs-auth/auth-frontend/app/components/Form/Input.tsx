@@ -20,7 +20,7 @@ const BaseInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   ref
 ) => {
   return (
-    <fieldset className="form-control">
+    <fieldset className="form-control" aria-label="input group">
       {!!label && (
         <div aria-label="label group" title="label group" className="label">
           <label className="label-text" htmlFor={name}>
