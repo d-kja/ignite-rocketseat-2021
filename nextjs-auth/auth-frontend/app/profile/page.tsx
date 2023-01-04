@@ -1,17 +1,21 @@
 "use client"
 
-import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 import { useAuthContext } from "../contexts/AuthContext"
+import { api } from "../services/api"
 
 const Profile = () => {
   const router = useRouter()
   const { user = {}, isAuthenticated } = useAuthContext()
 
-  useEffect(() => {
-    if (!isAuthenticated) router.push("/")
-  }, [isAuthenticated, router])
+  // useEffect(() => {
+  //   api
+  //     .get("/me")
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.error(err))
+  // }, [])
 
   return (
     <section
