@@ -10,12 +10,12 @@ const Profile = () => {
   const router = useRouter()
   const { user = {}, isAuthenticated } = useAuthContext()
 
-  // useEffect(() => {
-  //   api
-  //     .get("/me")
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.error(err))
-  // }, [])
+  useEffect(() => {
+    api
+      .get("/me")
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err))
+  }, [])
 
   return (
     <section

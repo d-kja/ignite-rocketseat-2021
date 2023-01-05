@@ -9,13 +9,13 @@ import {
 } from "react"
 import { useRouter } from "next/navigation"
 
-import { parseCookies, setCookie } from "nookies"
+import { parseCookies } from "nookies"
 
-import { api, updateAuthCookies } from "../services/api"
+import { api, destroyAuthCookies, updateAuthCookies } from "../services/api"
 
 export interface AuthContextProps {
   signIn: (credentials: SignInCredentials) => Promise<void>
-  signOut: () => Promise<void>
+  signOut: () => void
   isAuthenticated: boolean
   user: Partial<User>
 }
@@ -53,10 +53,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setUser({ email, permissions, roles })
         } catch (error) {
           console.error(error)
+
+          // as the axios intercepts the error related to expired token, within block we just need to concern ourselves with the other ones
+          handleSignOut()
         }
       }
       handleGetSession()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSignIn = async (credentials: SignInCredentials) => {
@@ -82,7 +86,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       console.error(error)
     }
   }
-  const handleSignOut = async () => {}
+  const handleSignOut = () => {
+    destroyAuthCookies()
+    router.push("/")
+  }
 
   return (
     <AuthContext.Provider

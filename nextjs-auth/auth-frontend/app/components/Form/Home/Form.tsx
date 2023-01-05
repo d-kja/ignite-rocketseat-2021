@@ -34,11 +34,10 @@ export const Form = () => {
     resolver: yupResolver(signInSchema),
   })
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [session] = useState(false)
 
   const handleSignIn: SubmitHandler<handleSubmitProps> = (data) => signIn(data)
 
-  return !session ? (
+  return !isAuthenticated ? (
     <form
       onSubmit={handleSubmit(handleSignIn)}
       className="max-w-sm w-full flex flex-col gap-2 mx-auto"
