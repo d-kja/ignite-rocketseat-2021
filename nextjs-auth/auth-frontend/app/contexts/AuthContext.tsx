@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
   const handleSignOut = () => {
     destroyAuthCookies()
+    setUser({})
     router.push("/")
   }
 

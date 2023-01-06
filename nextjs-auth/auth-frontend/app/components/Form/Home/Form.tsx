@@ -24,7 +24,7 @@ const signInSchema = yup
   .required()
 
 export const Form = () => {
-  const { isAuthenticated, signIn } = useAuthContext()
+  const { isAuthenticated, signIn, signOut } = useAuthContext()
 
   const {
     register,
@@ -65,7 +65,7 @@ export const Form = () => {
     </form>
   ) : (
     <div className="mx-6 w-full">
-      <Button type="button" className="btn-secondary w-full">
+      <Button type="button" className="btn-secondary w-full" onClick={signOut}>
         Sign Out
       </Button>
     </div>

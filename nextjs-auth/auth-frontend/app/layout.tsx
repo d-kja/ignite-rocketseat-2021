@@ -33,7 +33,7 @@ export default function RootLayout({
           <AuthProvider>
             <div
               aria-label="login form"
-              className="h-full w-full flex items-center justify-center md:max-w-md bg-primary/10"
+              className="h-full w-full flex items-center justify-center md:max-w-md bg-primary/10 mr-auto"
             >
               <Form />
             </div>
