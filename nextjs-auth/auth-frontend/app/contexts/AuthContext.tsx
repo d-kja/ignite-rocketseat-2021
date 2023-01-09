@@ -70,10 +70,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const { permissions, roles, token, refreshToken } = response?.data
 
       // update cookies && auth header
-      updateAuthCookies({
-        authToken: token,
-        authRefreshToken: refreshToken,
-      })
+      updateAuthCookies(
+        {
+          authToken: token,
+          authRefreshToken: refreshToken,
+        },
+        undefined,
+        api
+      )
 
       setUser({
         email: credentials.email,
@@ -87,7 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
   const handleSignOut = () => {
-    destroyAuthCookies()
+    destroyAuthCookies(undefined, api)
     setUser({})
     router.push("/")
   }

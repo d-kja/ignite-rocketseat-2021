@@ -1,16 +1,7 @@
-import axios, { AxiosError } from "axios"
+import axios, { AxiosError, AxiosInstance } from "axios"
+import { GetServerSidePropsContext } from "next"
 import { destroyCookie, parseCookies, setCookie } from "nookies"
-
-let cookies = parseCookies()
-let isRefreshingToken = false
-let failedRequestsQueue = []
-
-export const api = axios.create({
-  baseURL: "http://localhost:3333",
-  headers: {
-    Authorization: `Bearer ${cookies["next-auth.token"]}`,
-  },
-})
+import Router from "next/router"
 
 type updateAuthCookiesProps = {
   authToken: string
@@ -22,89 +13,124 @@ type TAuthResponse = {
   message: string
 }
 
-export const updateAuthCookies = ({
-  authToken,
-  authRefreshToken,
-}: updateAuthCookiesProps) => {
-  setCookie(undefined, "next-auth.token", authToken, {
+let isRefreshingToken = false
+let failedRequestsQueue = []
+
+export const updateAuthCookies = (
+  { authToken, authRefreshToken }: updateAuthCookiesProps,
+  ctx: GetServerSidePropsContext = undefined,
+  api: AxiosInstance
+) => {
+  setCookie(ctx, "next-auth.token", authToken, {
     maxAge: 60 * 60 * 24 * 30, // 30 days
     path: "/", // global path
   })
-  setCookie(undefined, "next-auth.refreshToken", authRefreshToken, {
+  setCookie(ctx, "next-auth.refreshToken", authRefreshToken, {
     maxAge: 60 * 60 * 24 * 30, // 30 days
     path: "/", // global path
   })
 
-  updateAuthHeader(authToken)
+  updateAuthHeader(authToken, api)
 }
-const updateAuthHeader = (authToken: string) =>
+const updateAuthHeader = (authToken: string, api: AxiosInstance) =>
   (api.defaults.headers["Authorization"] = `Bearer ${authToken}`)
-export const destroyAuthCookies = async () => {
-  destroyCookie(undefined, "next-auth.token")
-  destroyCookie(undefined, "next-auth.refreshToken")
+export const destroyAuthCookies = async (
+  ctx: GetServerSidePropsContext = undefined,
+  api: AxiosInstance
+) => {
+  destroyCookie(ctx, "next-auth.token")
+  destroyCookie(ctx, "next-auth.refreshToken")
 
   api.defaults.headers["Authorization"] = undefined
-  // Router.push("/") (Client-side only)
+
+  console.log("Window", typeof window)
+  // if(typeof window !== "undefined") Router.push("/") (client-side only)
+  // if(process.browser) Router.push("/") *deprecated*
 }
 
-// intercepting response to refresh token
-api.interceptors.response.use(
-  (res) => {
-    return res
-  }, // ignore successful responses
-  (err: AxiosError<TAuthResponse>) => {
-    if (err.response.status === 401) {
-      if (err.response.data?.code === "token.expired") {
-        cookies = parseCookies()
-        const { "next-auth.refreshToken": refreshToken } = cookies
-        const originalRequestConfig = err.config
+export const apiClient = (ctx: GetServerSidePropsContext = undefined) => {
+  let cookies = parseCookies(ctx)
 
-        // If it's not refreshing, refresh the token & retry failed requests
-        if (!isRefreshingToken) {
-          isRefreshingToken = true
-          api
-            .post("/refresh", {
-              refreshToken,
-            })
-            .then((response) => {
-              const { token, refreshToken: newRefreshToken } = response.data
+  const apiInstance = axios.create({
+    baseURL: "http://localhost:3333",
+    headers: {
+      Authorization: `Bearer ${cookies["next-auth.token"]}`,
+    },
+  })
 
-              updateAuthCookies({
-                authToken: token,
-                authRefreshToken: newRefreshToken,
+  // intercepting response to refresh token
+  apiInstance.interceptors.response.use(
+    (res) => {
+      return res
+    }, // ignore successful responses
+    (err: AxiosError<TAuthResponse>) => {
+      if (err.response.status === 401) {
+        if (err.response.data?.code === "token.expired") {
+          cookies = parseCookies(ctx)
+          const { "next-auth.refreshToken": refreshToken } = cookies
+          const originalRequestConfig = err.config
+
+          // If it's not refreshing, refresh the token & retry failed requests
+          if (!isRefreshingToken) {
+            isRefreshingToken = true
+            apiInstance
+              .post("/refresh", {
+                refreshToken,
               })
+              .then((response) => {
+                const { token, refreshToken: newRefreshToken } = response.data
+                console.log("refresh")
+                updateAuthCookies(
+                  {
+                    authToken: token,
+                    authRefreshToken: newRefreshToken,
+                  },
+                  ctx,
+                  apiInstance
+                )
 
-              failedRequestsQueue.forEach((request) => request.onResolve(token))
-              failedRequestsQueue = []
+                failedRequestsQueue.forEach((request) =>
+                  request.onResolve(token)
+                )
+                failedRequestsQueue = []
+              })
+              .catch((err) => {
+                failedRequestsQueue.forEach((request) => request.onReject(err))
+                failedRequestsQueue = []
+
+                destroyAuthCookies(ctx, apiInstance)
+              })
+              .finally(() => {
+                isRefreshingToken = false
+              })
+          }
+
+          // Queue failed requests to retry later
+          return new Promise((resolve, reject) => {
+            failedRequestsQueue.push({
+              onResolve: (token: string) => {
+                if (!originalRequestConfig) return Promise.reject()
+
+                originalRequestConfig.headers[
+                  "Authorization"
+                ] = `Bearer ${token}`
+
+                return resolve(apiInstance(originalRequestConfig))
+              },
+              onReject: (err: AxiosError) => reject(err),
             })
-            .catch((err) => {
-              failedRequestsQueue.forEach((request) => request.onReject(err))
-              failedRequestsQueue = []
-            })
-            .finally(() => {
-              isRefreshingToken = false
-            })
-        }
-
-        // Queue failed requests to retry later
-        return new Promise((resolve, reject) => {
-          failedRequestsQueue.push({
-            onResolve: (token: string) => {
-              if (!originalRequestConfig) return Promise.reject()
-
-              originalRequestConfig.headers["Authorization"] = `Bearer ${token}`
-
-              return resolve(api(originalRequestConfig))
-            },
-            onReject: (err: AxiosError) => reject(err),
           })
-        })
+        }
+      } else {
+        destroyAuthCookies(ctx, apiInstance)
       }
-    } else {
-      destroyAuthCookies()
-    }
 
-    // if the error status isn't 401, Next()
-    return Promise.reject(err)
-  }
-)
+      // if the error status isn't 401, Next()
+      return Promise.reject(err)
+    }
+  )
+
+  return apiInstance
+}
+
+export const api = apiClient()

@@ -11,6 +11,8 @@ const Profile = () => {
   const { user = {}, isAuthenticated } = useAuthContext()
 
   useEffect(() => {
+    if (!isAuthenticated) router.push("/")
+
     api
       .get("/me")
       .then((res) => console.log(res))
