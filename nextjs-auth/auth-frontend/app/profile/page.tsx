@@ -5,10 +5,13 @@ import { useEffect } from "react"
 
 import { useAuthContext } from "../contexts/AuthContext"
 import { api } from "../services/api"
+import { useCan } from "../hooks/useCan"
+import { Can } from "../components/Can"
 
 const Profile = () => {
   const router = useRouter()
   const { user = {}, isAuthenticated } = useAuthContext()
+  const canUserSeeMetrics = useCan({ permissions: ["metrics.list"] })
 
   useEffect(() => {
     if (!isAuthenticated) router.push("/")
@@ -52,6 +55,8 @@ const Profile = () => {
             ))}
           </ul>
         </div>
+
+        <Can permissions={["metrics.list"]}>I can see metrics!</Can>
       </div>
     </section>
   )

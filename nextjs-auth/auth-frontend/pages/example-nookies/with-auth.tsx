@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next"
 import React from "react"
 import { apiClient } from "../../app/services/api"
 import { withSSRAuth } from "../../utils/withSSRAuth"
+import { AuthTokenError } from "../../app/services/errors/AuthTokenError"
 
 const withAuth = () => {
   return <div>withAuth</div>
@@ -12,18 +13,8 @@ export const getServerSideProps: GetServerSideProps = withSSRAuth(
   async (ctx) => {
     const api = apiClient(ctx)
 
-    try {
-      const response = await api.get("/me")
-      console.log(response.data)
-    } catch (error) {
-      console.log(error)
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
-      }
-    }
+    const response = await api.get("/me")
+    console.log(response.data)
 
     return {
       props: {},

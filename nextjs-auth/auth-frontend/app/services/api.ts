@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance } from "axios"
 import { GetServerSidePropsContext } from "next"
 import { destroyCookie, parseCookies, setCookie } from "nookies"
 import Router from "next/router"
+import { AuthTokenError } from "./errors/AuthTokenError"
 
 type updateAuthCookiesProps = {
   authToken: string
@@ -36,14 +37,13 @@ const updateAuthHeader = (authToken: string, api: AxiosInstance) =>
   (api.defaults.headers["Authorization"] = `Bearer ${authToken}`)
 export const destroyAuthCookies = async (
   ctx: GetServerSidePropsContext = undefined,
-  api: AxiosInstance
+  api: AxiosInstance = undefined
 ) => {
   destroyCookie(ctx, "next-auth.token")
   destroyCookie(ctx, "next-auth.refreshToken")
 
-  api.defaults.headers["Authorization"] = undefined
+  if (!!api) api.defaults.headers["Authorization"] = undefined
 
-  console.log("Window", typeof window)
   // if(typeof window !== "undefined") Router.push("/") (client-side only)
   // if(process.browser) Router.push("/") *deprecated*
 }
@@ -79,7 +79,6 @@ export const apiClient = (ctx: GetServerSidePropsContext = undefined) => {
               })
               .then((response) => {
                 const { token, refreshToken: newRefreshToken } = response.data
-                console.log("refresh")
                 updateAuthCookies(
                   {
                     authToken: token,
@@ -123,6 +122,9 @@ export const apiClient = (ctx: GetServerSidePropsContext = undefined) => {
         }
       } else {
         destroyAuthCookies(ctx, apiInstance)
+        if (typeof window === "undefined") {
+          return Promise.reject(new AuthTokenError())
+        }
       }
 
       // if the error status isn't 401, Next()
