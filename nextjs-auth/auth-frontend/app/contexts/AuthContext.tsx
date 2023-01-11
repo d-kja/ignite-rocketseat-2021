@@ -33,6 +33,8 @@ export type User = {
   roles: string[]
 }
 
+let authBroadcast: BroadcastChannel
+
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -40,6 +42,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const [user, setUser] = useState<Partial<User>>({})
   const isAuthenticated = !!user?.email
+
+  useEffect(() => {
+    authBroadcast = new BroadcastChannel("auth")
+
+    authBroadcast.onmessage = (event) => {
+      const { data } = event
+
+      switch (data) {
+        case "sign-out":
+          handleSignOut({
+            callBroadcast: false,
+          })
+          break
+
+        default:
+          break
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const { "next-auth.token": token } = parseCookies()
@@ -85,14 +107,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         roles,
       })
 
+      authBroadcast && authBroadcast.postMessage("sign-in")
+
       router.push("/profile")
     } catch (error) {
       console.error(error)
     }
   }
-  const handleSignOut = () => {
+  const handleSignOut = (options?: { callBroadcast?: boolean }) => {
+    const { callBroadcast = true } = options
+
     destroyAuthCookies(undefined, api)
     setUser({})
+
+    callBroadcast && authBroadcast && authBroadcast.postMessage("sign-out")
+
     router.push("/")
   }
 

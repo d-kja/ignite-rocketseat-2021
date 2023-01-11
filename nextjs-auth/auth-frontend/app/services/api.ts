@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from "axios"
 import { GetServerSidePropsContext } from "next"
 import { destroyCookie, parseCookies, setCookie } from "nookies"
-import Router from "next/router"
+
 import { AuthTokenError } from "./errors/AuthTokenError"
 
 type updateAuthCookiesProps = {
@@ -67,12 +67,16 @@ export const apiClient = (ctx: GetServerSidePropsContext = undefined) => {
       if (err.response.status === 401) {
         if (err.response.data?.code === "token.expired") {
           cookies = parseCookies(ctx)
+
           const { "next-auth.refreshToken": refreshToken } = cookies
+
+          // Config holding anything related to the request, so that we can retry it later using the same parameters as the base
           const originalRequestConfig = err.config
 
           // If it's not refreshing, refresh the token & retry failed requests
           if (!isRefreshingToken) {
             isRefreshingToken = true
+
             apiInstance
               .post("/refresh", {
                 refreshToken,
@@ -98,6 +102,9 @@ export const apiClient = (ctx: GetServerSidePropsContext = undefined) => {
                 failedRequestsQueue = []
 
                 destroyAuthCookies(ctx, apiInstance)
+                if (typeof window !== "undefined") {
+                  // signOut() (Client side)
+                }
               })
               .finally(() => {
                 isRefreshingToken = false
@@ -119,11 +126,13 @@ export const apiClient = (ctx: GetServerSidePropsContext = undefined) => {
               onReject: (err: AxiosError) => reject(err),
             })
           })
-        }
-      } else {
-        destroyAuthCookies(ctx, apiInstance)
-        if (typeof window === "undefined") {
-          return Promise.reject(new AuthTokenError())
+        } else {
+          if (typeof window === "undefined") {
+            return Promise.reject(new AuthTokenError())
+          } else {
+            destroyAuthCookies(ctx, apiInstance)
+            // signOut() (Client side / non APP Folder)
+          }
         }
       }
 

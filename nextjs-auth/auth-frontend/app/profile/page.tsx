@@ -7,6 +7,7 @@ import { useAuthContext } from "../contexts/AuthContext"
 import { api } from "../services/api"
 import { useCan } from "../hooks/useCan"
 import { Can } from "../components/Can"
+import Head from "next/head"
 
 const Profile = () => {
   const router = useRouter()

@@ -59,17 +59,16 @@ export function withSSRAuth<T = unknown>(
       // fallback fn
       return await fn(ctx)
     } catch (error) {
-      console.log(error instanceof AuthTokenError)
-      // if (error instanceof AuthTokenError) {
-      destroyAuthCookies(ctx, undefined)
+      if (error instanceof AuthTokenError) {
+        destroyAuthCookies(ctx, undefined)
 
-      return {
-        redirect: {
-          destination: "/",
-          permanent: false,
-        },
+        return {
+          redirect: {
+            destination: "/",
+            permanent: false,
+          },
+        }
       }
-      // }
     }
 
     return {
