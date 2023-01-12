@@ -1,4 +1,4 @@
-import { Button as Btn, Box } from '@chakra-ui/react';
+import { Button as Btn, Box, Button } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
@@ -29,6 +29,7 @@ const handleFetchImages = async ({
       after: pageParam,
     },
   });
+
   console.log('api response', response.data);
   return response.data;
 };
@@ -66,13 +67,14 @@ export default function Home(): JSX.Element {
         {hasNextPage && (
           <>
             {/* If I use chakra's button it throws an error ;-; */}
-            <button
+            <Button
               type="button"
+              mt="6"
               disabled={!hasNextPage || isFetchingNextPage}
               onClick={() => fetchNextPage()}
             >
               {isFetchingNextPage ? 'Carregando...' : 'Carregar mais'}
-            </button>
+            </Button>
           </>
         )}
       </Box>

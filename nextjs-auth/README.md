@@ -38,7 +38,7 @@
 - [React-hook-forms](https://react-hook-form.com/)
 - [React-hook-forms](https://react-hook-form.com/)
 - [Yup](https://github.com/jquense/yup)
-- [React-query](https://react-query-v3.tanstack.com/) <span style="opacity: 50%; margin-left: 5px;">gonna add later on</span>
+<!-- - [React-query](https://react-query-v3.tanstack.com/) <span style="opacity: 50%; margin-left: 5px;">gonna add later on</span> -->
 
 ###### Styling
 
