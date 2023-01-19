@@ -1,12 +1,4 @@
-import {
-  ComponentType,
-  Suspense,
-  lazy,
-  memo,
-  startTransition,
-  useState,
-} from "react"
-import type { ProductModalProps } from "./ProductModal"
+import { Suspense, lazy, memo, startTransition, useState } from "react"
 
 // NEXT WAY OF USING LAZY IMPORTS
 // const ProductModal = dynamic(() => import("./ProductModal"))
@@ -16,7 +8,7 @@ const ProductModal = lazy(
   () => import("./ProductModal") //.then((mod) => mod.ProductModal) if it's export by default
 )
 
-// Lazy imports (just when needed) const {format} = await import('date-fns')
+// Lazy imports (just when it's needed) const { format } = await import('date-fns')
 
 interface ProductProps {
   product: {
