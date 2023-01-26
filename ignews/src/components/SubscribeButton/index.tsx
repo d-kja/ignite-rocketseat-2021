@@ -6,19 +6,11 @@ import { loadStripeJs } from "../../services/stripe-js"
 
 import styles from "./styles.module.scss"
 
-interface SubscribeButtonProps {
-  productId: string
-}
-
-export const SubscribeButton = ({
-  productId,
-}: SubscribeButtonProps) => {
+export const SubscribeButton = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const { data: session } = useSession()
   const router = useRouter()
-  const buttonText = session
-    ? "Subscribe now"
-    : "Sign in first!"
+  const buttonText = session ? "Subscribe now" : "Sign in first!"
 
   const handleSubscribe = async () => {
     if (!session) {

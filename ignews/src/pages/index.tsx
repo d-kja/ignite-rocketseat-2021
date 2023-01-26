@@ -14,9 +14,7 @@ interface HomeProps {
 }
 
 export default function Home({ product }: HomeProps) {
-  const formattedPrice = priceFormatter.format(
-    product?.amount ?? 0
-  )
+  const formattedPrice = priceFormatter.format(product?.amount ?? 0)
 
   return (
     <>
@@ -35,7 +33,7 @@ export default function Home({ product }: HomeProps) {
             <span>for {formattedPrice} month</span>
           </p>
 
-          <SubscribeButton productId={product.id} />
+          <SubscribeButton />
         </section>
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
