@@ -12,7 +12,7 @@ jest.mock("next/router", () => require("next-router-mock"))
 //   }
 // })
 
-describe("active-link-component", () => {
+describe("component/active-link", () => {
   beforeEach(() => {
     mockRouter.setCurrentUrl("/")
   })

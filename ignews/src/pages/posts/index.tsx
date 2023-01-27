@@ -19,7 +19,7 @@ export interface Post {
   date: string
 }
 
-interface PostsProps {
+export interface PostsProps {
   posts: Post[]
 }
 
@@ -60,12 +60,9 @@ export const getStaticProps: GetStaticProps = async () => {
     title: asText(post.data.title),
     content:
       post.data.content.find(
-        (item) =>
-          item.type === "paragraph" && item.text?.length > 0
+        (item) => item.type === "paragraph" && item.text?.length > 0
       )?.text ?? "...",
-    date: new Date(
-      post.last_publication_date
-    ).toLocaleDateString("en-US", {
+    date: new Date(post.last_publication_date).toLocaleDateString("en-US", {
       day: "2-digit",
       month: "long",
       year: "numeric",

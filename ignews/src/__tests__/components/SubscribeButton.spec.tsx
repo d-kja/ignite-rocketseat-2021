@@ -8,7 +8,7 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }))
 
-describe("subscribe-button-component", () => {
+describe("component/subscribe-button", () => {
   it("should render", () => {
     const useSessionMocked = jest.mocked(useSession)
     useSessionMocked.mockReturnValueOnce({

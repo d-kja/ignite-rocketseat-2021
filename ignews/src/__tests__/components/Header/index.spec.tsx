@@ -10,7 +10,7 @@ jest.mock("next-auth/react", () => ({
   }),
 }))
 
-describe("HeaderComponent", () => {
+describe("component/header", () => {
   it("should render", () => {
     render(<Header />)
     expect(screen.getByText("Home")).toBeInTheDocument()

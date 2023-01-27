@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 
 jest.mock("next-auth/react")
 
-describe("sign-in-with-github", () => {
+describe("component/sign-in-with-github", () => {
   const mockedSession = jest.mocked(useSession)
 
   it("should render", () => {

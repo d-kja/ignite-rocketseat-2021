@@ -10,14 +10,13 @@ export interface PostLinkProps {
   date: string
 }
 
-export const PostLink = ({
-  content,
-  date,
-  href,
-  title,
-}: PostLinkProps) => {
+export const PostLink = ({ content, date, href, title }: PostLinkProps) => {
   return (
-    <Link href={`/posts/${href}`} className={styles.Post}>
+    <Link
+      href={`/posts/${href}`}
+      className={styles.Post}
+      data-testid="post-link"
+    >
       <time>
         <AiOutlineClockCircle /> {date}
       </time>

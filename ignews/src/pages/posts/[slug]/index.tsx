@@ -8,7 +8,7 @@ import { getPrismicClient } from "../../../services/prismic"
 
 import styles from "./styles.module.scss"
 
-type Post = {
+export type Post = {
   slug: string
   time: string
   title: string
@@ -39,48 +39,44 @@ function Post({ post }: PostProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps =
-  async ({ req, params }) => {
-    const session = await getSession({
-      req,
-    })
-    const { slug } = params
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  params,
+}) => {
+  const session = await getSession({
+    req,
+  })
+  const { slug } = params
 
-    const subscription = (session as any)?.subscription
+  const subscription = (session as any)?.subscription
 
-    if (!subscription)
-      return {
-        redirect: {
-          destination: `/posts/${slug}/preview`,
-          permanent: false,
-        },
-      }
-
-    const prismic = getPrismicClient(req)
-    const response = await prismic.getByUID(
-      "publication",
-      String(slug),
-      {}
-    )
-
-    const post: Post = {
-      slug: String(slug),
-      title: asText(response.data.title),
-      content: asHTML(response.data.content),
-      time: new Date(
-        response.last_publication_date
-      ).toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
-    }
-
+  if (!subscription)
     return {
-      props: {
-        post,
+      redirect: {
+        destination: `/posts/${slug}/preview`,
+        permanent: false,
       },
     }
+
+  const prismic = getPrismicClient(req)
+  const response = await prismic.getByUID("publication", String(slug), {})
+
+  const post: Post = {
+    slug: String(slug),
+    title: asText(response.data.title),
+    content: asHTML(response.data.content),
+    time: new Date(response.last_publication_date).toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
   }
+
+  return {
+    props: {
+      post,
+    },
+  }
+}
 
 export default Post
