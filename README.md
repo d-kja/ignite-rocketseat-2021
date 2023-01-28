@@ -23,25 +23,68 @@
   <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=49AA26&labelColor=121214" />
 </p>
 
+<br/>
+
+# Documentation
+
+## How to use
+
+To run any of the projects in this repo you will need to clone the repository and install the dependencies. For that you will need [Node.js](https://nodejs.org/en/) and [NPM](https://www.npmjs.com/) installed.
+
+### Cloning the project
+
+The easiest way is through the GitHub itself, just click on the `<> Code` green button and select the `Download ZIP` option
+
+Now the second option is to use [Git](https://git-scm.com/), here is an example:
+
+```bash
+  git clone [project-url]
+```
+
+<br/>
+
+### Running the project
+
+First, you will need to select the project you want to build, e.g `Ig.news`
+
+Select the directory containing the project
+
+```bash
+  cd ignews
+```
+
+Install the dependencies and run the project
+
+```bash
+  npm install && npm run dev
+```
+
+---
+
+<br/>
+
 ## 🚀 Stack
 
 #### Front-end
 
 ###### Base
+
 - [Typescript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/)
 - [Next](https://nextjs.org/)
 - [Vite](https://vitejs.dev/)
 
 ###### Styling
+
 - [Sass](https://sass-lang.com)
-- Styled Components
+- [Styled Components](https://styled-components.com/)
 - [Tailwind](https://tailwindcss.com)
 - [ChakraUI](https://chakra-ui.com)
 
 #### Back-end
 
 ###### Base
+
 - [Node](https://nodejs.org/)
 
 <br />
