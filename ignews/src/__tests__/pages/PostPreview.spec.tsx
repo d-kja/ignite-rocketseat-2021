@@ -85,7 +85,11 @@ describe("page/post-preview", () => {
     const getStaticPropsResponse = await getStaticProps({
       params: { slug: postItem.slug },
     })
-
+    new Date().toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
     expect(getStaticPropsResponse).toEqual(
       expect.objectContaining({
         props: {
@@ -93,7 +97,11 @@ describe("page/post-preview", () => {
             slug: "example-post-slug",
             title: "heading-example",
             content: "<p>paragraph-example</p>",
-            time: "Jan 27, 2023",
+            time: new Date().toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }),
           },
         },
       })
